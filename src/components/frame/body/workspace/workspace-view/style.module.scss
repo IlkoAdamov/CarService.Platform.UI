@@ -1,0 +1,14 @@
+.title {
+  display: flex;
+  justify-items: center;
+
+  .icon {
+    padding: 3px;
+  }
+
+  .text {
+    font-size: 25px;
+    font-weight: bold;
+    padding-left: 10px;
+  }
+}
