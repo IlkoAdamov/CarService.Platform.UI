@@ -8,11 +8,26 @@ import {
 } from "@mui/material";
 import style from "./style.module.scss";
 import { MdAddToDrive } from "react-icons/md";
+import { Notification } from "../../../../../models/index";
+import AlertNotification from "../../../../shared/notifications/alert-notification";
+import { useState } from "react";
+import {
+  NotificationTitle,
+  NotificationType,
+} from "../../../../../models/notification.model";
 
 function WorkspaceAdd() {
+  const [notification, setNotification] = useState<Notification>();
+
   function submit(event: any) {
     event.preventDefault();
     let form_data = new FormData(event.target);
+    setNotification({
+      type: NotificationType.SUCCESS,
+      title: NotificationTitle.SUCCESS,
+      message: "This is a success Alert with an encouraging title.",
+    });
+
     console.log(form_data);
   }
 
@@ -91,24 +106,7 @@ function WorkspaceAdd() {
           </form>
         </div>
         <div style={{ width: "40%" }}>
-          <Stack sx={{ width: "100%" }} spacing={2}>
-            <Alert severity="success">
-              <AlertTitle>Success</AlertTitle>
-              This is a success Alert with an encouraging title.
-            </Alert>
-            <Alert severity="info">
-              <AlertTitle>Info</AlertTitle>
-              This is an info Alert with an informative title.
-            </Alert>
-            <Alert severity="warning">
-              <AlertTitle>Warning</AlertTitle>
-              This is a warning Alert with a cautious title.
-            </Alert>
-            <Alert severity="error">
-              <AlertTitle>Error</AlertTitle>
-              This is an error Alert with a scary title.
-            </Alert>
-          </Stack>
+          {notification && <AlertNotification notification={notification} />}
         </div>
       </div>
     </div>

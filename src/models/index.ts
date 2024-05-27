@@ -4,3 +4,4 @@ export { EndPoints } from "./end-point.model";
 
 export { type DataSource } from "./grid-models/data-source.model";
 export { type Car } from "./data-models/car.model";
+export { type Notification } from "./notification.model";
