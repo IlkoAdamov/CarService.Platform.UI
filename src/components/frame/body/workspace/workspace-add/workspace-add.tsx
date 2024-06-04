@@ -1,40 +1,31 @@
-import {
-  Alert,
-  AlertTitle,
-  Button,
-  Divider,
-  InputAdornment,
-  Stack,
-  TextField,
-} from "@mui/material";
+import { Button, Divider, TextField } from "@mui/material";
 import style from "./style.module.scss";
 import { MdAddToDrive } from "react-icons/md";
-import { Notification } from "../../../../../models/index";
+import { BiError } from "react-icons/bi";
+import { Control, Notification } from "../../../../../models/index";
 import AlertNotification from "../../../../shared/notifications/alert-notification";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import {
   NotificationTitle,
   NotificationType,
 } from "../../../../../models/notification.model";
-import AbcIcon from "@mui/icons-material/Abc";
 
 function WorkspaceAdd() {
   const [notification, setNotification] = useState<Notification>();
 
   const vinRef = useRef(null); //vinRef.current!["id"] or vinRef.current!["value"]
 
-  const [currentControl, setCurrentControl] = useState<string>();
-  const [controls, setControls] = useState<string[]>();
-  const listOfControls: string[] = controls ?? [];
+  const [time, setTime] = useState<number>();
+  const [controls, setControls] = useState<Control[]>();
+  const listOfControls: Control[] = controls ?? [];
 
-  function validate(event: any) {
-    debugger;
+  function validate(event: any, lable: string) {
     if (event.target.value === "") {
-      listOfControls.push(event.target.id);
+      listOfControls.push({ id: event.target.id, lable: lable });
       setControls(listOfControls);
     }
 
-    setCurrentControl(event.target.id);
+    setTime(new Date().getTime());
   }
 
   function submit(event: any) {
@@ -74,8 +65,10 @@ function WorkspaceAdd() {
                   id="vin"
                   size="small"
                   fullWidth
-                  onBlur={validate}
-                  error={controls?.includes("vin")}
+                  onBlur={(e) => validate(e, "VIN")}
+                  error={
+                    controls?.find((item) => item.id === "vin") !== undefined
+                  }
                 />
               </div>
             </div>
@@ -86,8 +79,10 @@ function WorkspaceAdd() {
                   id="brand"
                   size="small"
                   fullWidth
-                  onBlur={validate}
-                  error={controls?.includes("brand")}
+                  onBlur={(e) => validate(e, "Brand")}
+                  error={
+                    controls?.find((item) => item.id === "brand") !== undefined
+                  }
                 />
               </div>
               <div style={{ width: "45%", padding: "10px" }}>
@@ -96,8 +91,10 @@ function WorkspaceAdd() {
                   id="model"
                   size="small"
                   fullWidth
-                  onBlur={validate}
-                  error={controls?.includes("model")}
+                  onBlur={(e) => validate(e, "Model")}
+                  error={
+                    controls?.find((item) => item.id === "model") !== undefined
+                  }
                 />
               </div>
             </div>
@@ -108,8 +105,10 @@ function WorkspaceAdd() {
                   id="fuel"
                   size="small"
                   fullWidth
-                  onBlur={validate}
-                  error={controls?.includes("fuel")}
+                  onBlur={(e) => validate(e, "Fuel")}
+                  error={
+                    controls?.find((item) => item.id === "fuel") !== undefined
+                  }
                 />
               </div>
             </div>
@@ -120,8 +119,10 @@ function WorkspaceAdd() {
                   id="plate"
                   size="small"
                   fullWidth
-                  onBlur={validate}
-                  error={controls?.includes("plate")}
+                  onBlur={(e) => validate(e, "Plate")}
+                  error={
+                    controls?.find((item) => item.id === "plate") !== undefined
+                  }
                 />
               </div>
             </div>
@@ -132,8 +133,11 @@ function WorkspaceAdd() {
                   id="powerKw"
                   size="small"
                   fullWidth
-                  onBlur={validate}
-                  error={controls?.includes("powerKw")}
+                  onBlur={(e) => validate(e, "Power (kW)")}
+                  error={
+                    controls?.find((item) => item.id === "powerKw") !==
+                    undefined
+                  }
                 />
               </div>
               <div style={{ width: "45%", padding: "10px" }}>
@@ -142,8 +146,11 @@ function WorkspaceAdd() {
                   id="powerHp"
                   size="small"
                   fullWidth
-                  onBlur={validate}
-                  error={controls?.includes("powerHp")}
+                  onBlur={(e) => validate(e, "Power (hP)")}
+                  error={
+                    controls?.find((item) => item.id === "powerHp") !==
+                    undefined
+                  }
                 />
               </div>
             </div>
@@ -166,7 +173,20 @@ function WorkspaceAdd() {
         <div style={{ width: "40%" }}>
           {notification && <AlertNotification notification={notification} />}
           {controls?.map((item, index) => (
-            <div key={index}>{item}</div>
+            <div
+              key={index}
+              style={{
+                display: "flex",
+                gap: "15px",
+                color: "#C62828",
+                paddingTop: "20px",
+              }}
+            >
+              <div>
+                <BiError fontSize="25" />
+              </div>
+              <div>{item.lable} field is not populate</div>
+            </div>
           ))}
         </div>
       </div>
