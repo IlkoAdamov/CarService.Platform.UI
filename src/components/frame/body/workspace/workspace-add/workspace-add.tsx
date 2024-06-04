@@ -3,6 +3,7 @@ import {
   AlertTitle,
   Button,
   Divider,
+  InputAdornment,
   Stack,
   TextField,
 } from "@mui/material";
@@ -10,14 +11,31 @@ import style from "./style.module.scss";
 import { MdAddToDrive } from "react-icons/md";
 import { Notification } from "../../../../../models/index";
 import AlertNotification from "../../../../shared/notifications/alert-notification";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   NotificationTitle,
   NotificationType,
 } from "../../../../../models/notification.model";
+import AbcIcon from "@mui/icons-material/Abc";
 
 function WorkspaceAdd() {
   const [notification, setNotification] = useState<Notification>();
+
+  const vinRef = useRef(null); //vinRef.current!["id"] or vinRef.current!["value"]
+
+  const [currentControl, setCurrentControl] = useState<string>();
+  const [controls, setControls] = useState<string[]>();
+  const listOfControls: string[] = controls ?? [];
+
+  function validate(event: any) {
+    debugger;
+    if (event.target.value === "") {
+      listOfControls.push(event.target.id);
+      setControls(listOfControls);
+    }
+
+    setCurrentControl(event.target.id);
+  }
 
   function submit(event: any) {
     event.preventDefault();
@@ -50,25 +68,61 @@ function WorkspaceAdd() {
           <form onSubmit={submit}>
             <div style={{ display: "flex" }}>
               <div style={{ width: "90%", padding: "10px" }}>
-                <TextField label="VIN" id="vin" size="small" fullWidth />
+                <TextField
+                  inputRef={vinRef}
+                  label="VIN"
+                  id="vin"
+                  size="small"
+                  fullWidth
+                  onBlur={validate}
+                  error={controls?.includes("vin")}
+                />
               </div>
             </div>
             <div style={{ display: "flex" }}>
               <div style={{ width: "45%", padding: "10px" }}>
-                <TextField label="Brand" id="brand" size="small" fullWidth />
+                <TextField
+                  label="Brand"
+                  id="brand"
+                  size="small"
+                  fullWidth
+                  onBlur={validate}
+                  error={controls?.includes("brand")}
+                />
               </div>
               <div style={{ width: "45%", padding: "10px" }}>
-                <TextField label="Model" id="model" size="small" fullWidth />
+                <TextField
+                  label="Model"
+                  id="model"
+                  size="small"
+                  fullWidth
+                  onBlur={validate}
+                  error={controls?.includes("model")}
+                />
               </div>
             </div>
             <div style={{ display: "flex" }}>
               <div style={{ width: "45%", padding: "10px" }}>
-                <TextField label="Fuel" id="fuel" size="small" fullWidth />
+                <TextField
+                  label="Fuel"
+                  id="fuel"
+                  size="small"
+                  fullWidth
+                  onBlur={validate}
+                  error={controls?.includes("fuel")}
+                />
               </div>
             </div>
             <div style={{ display: "flex" }}>
               <div style={{ width: "45%", padding: "10px" }}>
-                <TextField label="Plate" id="plate" size="small" fullWidth />
+                <TextField
+                  label="Plate"
+                  id="plate"
+                  size="small"
+                  fullWidth
+                  onBlur={validate}
+                  error={controls?.includes("plate")}
+                />
               </div>
             </div>
             <div style={{ display: "flex" }}>
@@ -78,6 +132,8 @@ function WorkspaceAdd() {
                   id="powerKw"
                   size="small"
                   fullWidth
+                  onBlur={validate}
+                  error={controls?.includes("powerKw")}
                 />
               </div>
               <div style={{ width: "45%", padding: "10px" }}>
@@ -86,6 +142,8 @@ function WorkspaceAdd() {
                   id="powerHp"
                   size="small"
                   fullWidth
+                  onBlur={validate}
+                  error={controls?.includes("powerHp")}
                 />
               </div>
             </div>
@@ -107,6 +165,9 @@ function WorkspaceAdd() {
         </div>
         <div style={{ width: "40%" }}>
           {notification && <AlertNotification notification={notification} />}
+          {controls?.map((item, index) => (
+            <div key={index}>{item}</div>
+          ))}
         </div>
       </div>
     </div>
