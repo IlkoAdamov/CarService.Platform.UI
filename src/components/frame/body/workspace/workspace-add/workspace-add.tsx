@@ -21,8 +21,20 @@ function WorkspaceAdd() {
 
   function validate(event: any, lable: string) {
     if (event.target.value === "") {
-      listOfControls.push({ id: event.target.id, lable: lable });
+      if (listOfControls.length === 0) {
+        listOfControls.push({ id: event.target.id, lable: lable });
+      } else {
+        if (!listOfControls.find((x) => x.id === event.target.id))
+          listOfControls.push({ id: event.target.id, lable: lable });
+      }
+
       setControls(listOfControls);
+    } else {
+      let filteredListOfCoftrols = listOfControls.filter(
+        (x) => x.id !== event.target.id
+      );
+      if (filteredListOfCoftrols?.length === 0) setNotification(undefined);
+      setControls(filteredListOfCoftrols);
     }
 
     setTime(new Date().getTime());
@@ -30,14 +42,113 @@ function WorkspaceAdd() {
 
   function submit(event: any) {
     event.preventDefault();
-    let form_data = new FormData(event.target);
+
+    if (
+      event.target.vin.required &&
+      event.target.vin.value === "" &&
+      !listOfControls.find((x) => x.id === event.target.vin.id)
+    ) {
+      listOfControls.push({
+        id: event.target.vin.id,
+        lable: event.target.vin.labels[0].textContent
+          .substr(0, event.target.vin.labels[0].textContent.indexOf("*"))
+          .trim(),
+      });
+      setControls(listOfControls);
+    }
+    if (
+      event.target.brand.required &&
+      event.target.brand.value === "" &&
+      !listOfControls.find((x) => x.id === event.target.brand.id)
+    ) {
+      listOfControls.push({
+        id: event.target.brand.id,
+        lable: event.target.brand.labels[0].textContent
+          .substr(0, event.target.brand.labels[0].textContent.indexOf("*"))
+          .trim(),
+      });
+      setControls(listOfControls);
+    }
+    if (
+      event.target.model.required &&
+      event.target.model.value === "" &&
+      !listOfControls.find((x) => x.id === event.target.model.id)
+    ) {
+      listOfControls.push({
+        id: event.target.model.id,
+        lable: event.target.model.labels[0].textContent
+          .substr(0, event.target.model.labels[0].textContent.indexOf("*"))
+          .trim(),
+      });
+      setControls(listOfControls);
+    }
+    if (
+      event.target.fuel.required &&
+      event.target.fuel.value === "" &&
+      !listOfControls.find((x) => x.id === event.target.fuel.id)
+    ) {
+      listOfControls.push({
+        id: event.target.fuel.id,
+        lable: event.target.fuel.labels[0].textContent
+          .substr(0, event.target.fuel.labels[0].textContent.indexOf("*"))
+          .trim(),
+      });
+      setControls(listOfControls);
+    }
+    if (
+      event.target.plate.required &&
+      event.target.plate.value === "" &&
+      !listOfControls.find((x) => x.id === event.target.plate.id)
+    ) {
+      listOfControls.push({
+        id: event.target.plate.id,
+        lable: event.target.plate.labels[0].textContent
+          .substr(0, event.target.plate.labels[0].textContent.indexOf("*"))
+          .trim(),
+      });
+      setControls(listOfControls);
+    }
+    if (
+      event.target.powerKw.required &&
+      event.target.powerKw.value === "" &&
+      !listOfControls.find((x) => x.id === event.target.powerKw.id)
+    ) {
+      listOfControls.push({
+        id: event.target.powerKw.id,
+        lable: event.target.powerKw.labels[0].textContent
+          .substr(0, event.target.powerKw.labels[0].textContent.indexOf("*"))
+          .trim(),
+      });
+      setControls(listOfControls);
+    }
+    if (
+      event.target.powerHp.required &&
+      event.target.powerHp.value === "" &&
+      !listOfControls.find((x) => x.id === event.target.powerHp.id)
+    ) {
+      listOfControls.push({
+        id: event.target.powerHp.id,
+        lable: event.target.powerHp.labels[0].textContent
+          .substr(0, event.target.powerHp.labels[0].textContent.indexOf("*"))
+          .trim(),
+      });
+      setControls(listOfControls);
+    }
+    if (controls?.length !== 0) {
+      setNotification({
+        type: NotificationType.ERROR,
+        title: NotificationTitle.ERROR,
+        message: "The following fields are required, please fill them out",
+      });
+
+      return;
+    }
+
     setNotification({
       type: NotificationType.SUCCESS,
       title: NotificationTitle.SUCCESS,
       message: "This is a success Alert with an encouraging title.",
     });
-
-    console.log(form_data);
   }
 
   return (
@@ -56,7 +167,7 @@ function WorkspaceAdd() {
         }}
       >
         <div style={{ width: "30%" }}>
-          <form onSubmit={submit}>
+          <form onSubmit={submit} noValidate>
             <div style={{ display: "flex" }}>
               <div style={{ width: "90%", padding: "10px" }}>
                 <TextField
@@ -69,6 +180,7 @@ function WorkspaceAdd() {
                   error={
                     controls?.find((item) => item.id === "vin") !== undefined
                   }
+                  required
                 />
               </div>
             </div>
@@ -83,6 +195,7 @@ function WorkspaceAdd() {
                   error={
                     controls?.find((item) => item.id === "brand") !== undefined
                   }
+                  required
                 />
               </div>
               <div style={{ width: "45%", padding: "10px" }}>
@@ -95,6 +208,7 @@ function WorkspaceAdd() {
                   error={
                     controls?.find((item) => item.id === "model") !== undefined
                   }
+                  required
                 />
               </div>
             </div>
@@ -109,6 +223,7 @@ function WorkspaceAdd() {
                   error={
                     controls?.find((item) => item.id === "fuel") !== undefined
                   }
+                  required
                 />
               </div>
             </div>
@@ -123,6 +238,7 @@ function WorkspaceAdd() {
                   error={
                     controls?.find((item) => item.id === "plate") !== undefined
                   }
+                  required
                 />
               </div>
             </div>
@@ -138,6 +254,7 @@ function WorkspaceAdd() {
                     controls?.find((item) => item.id === "powerKw") !==
                     undefined
                   }
+                  required
                 />
               </div>
               <div style={{ width: "45%", padding: "10px" }}>
@@ -151,6 +268,7 @@ function WorkspaceAdd() {
                     controls?.find((item) => item.id === "powerHp") !==
                     undefined
                   }
+                  required
                 />
               </div>
             </div>
